@@ -12,8 +12,10 @@ Roundy[root]=${0:A:h}
 #
 
 # Color definition for Command's Exit Status
-: ${ROUNDY_COLORS_FG_EXITSTATUS:=0}
-: ${ROUNDY_COLORS_BG_EXITSTATUS:=4}
+: ${ROUNDY_COLORS_FG_EXITSTATUS_GOOD:=0}
+: ${ROUNDY_COLORS_BG_EXITSTATUS_GOOD:=4}
+: ${ROUNDY_COLORS_FG_EXITSTATUS_BAD:=0}
+: ${ROUNDY_COLORS_BG_EXITSTATUS_BAD:=1}
 # Icon definition for Command's Exit Status
 : ${ROUNDY_EXITSTATUS_GOOD:=$'\uf058 '}
 : ${ROUNDY_EXITSTATUS_BAD:=$'\uf057 '}
@@ -124,18 +126,20 @@ roundy_prompt_left() {
   local p
   local char_open=$'\ue0b6'
   local char_close=$'\ue0b4'
+  local exit_color_bg="%(?|${ROUNDY_COLORS_BG_EXITSTATUS_GOOD}|${ROUNDY_COLORS_BG_EXITSTATUS_BAD})"
+  local exit_color_fg="%(?|${ROUNDY_COLORS_FG_EXITSTATUS_GOOD}|${ROUNDY_COLORS_FG_EXITSTATUS_BAD})"
 
-  p+="%F{${ROUNDY_COLORS_BG_EXITSTATUS}}"
+  p+="%F{${exit_color_bg}}"
   p+="${char_open}"
-  p+="%K{${ROUNDY_COLORS_BG_EXITSTATUS}}"
-  p+="%F{${ROUNDY_COLORS_FG_EXITSTATUS}}"
+  p+="%K{${exit_color_bg}}"
+  p+="%F{${exit_color_fg}}"
   p+="%{%(?|${ROUNDY_EXITSTATUS_GOOD}|${ROUNDY_EXITSTATUS_BAD})%2G%}"
   if [ -n "${Roundy[data_texc]}" ]; then
     p+="%K{${ROUNDY_COLORS_BG_TEXC}}"
   else
     p+="%K{${ROUNDY_COLORS_BG_DIR}}"
   fi
-  p+="%F{${ROUNDY_COLORS_BG_EXITSTATUS}}"
+  p+="%F{${exit_color_bg}}"
   p+="${char_close}"
 
   if [ -n "${Roundy[data_texc]}" ]; then
@@ -298,12 +302,14 @@ roundy_plugin_unload() {
 
   unset \
     ROUNDY_COLORS_BG_DIR \
-    ROUNDY_COLORS_BG_EXITSTATUS \
+    ROUNDY_COLORS_BG_EXITSTATUS_GOOD \
+    ROUNDY_COLORS_FG_EXITSTATUS_GOOD \
+    ROUNDY_COLORS_BG_EXITSTATUS_BAD \
+    ROUNDY_COLORS_FG_EXITSTATUS_BAD \
     ROUNDY_COLORS_BG_GITINFO \
     ROUNDY_COLORS_BG_TEXC \
     ROUNDY_COLORS_BG_USER \
     ROUNDY_COLORS_FG_DIR \
-    ROUNDY_COLORS_FG_EXITSTATUS \
     ROUNDY_COLORS_FG_GITINFO \
     ROUNDY_COLORS_FG_TEXC \
     ROUNDY_COLORS_FG_USER \
