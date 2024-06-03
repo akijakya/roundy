@@ -133,7 +133,7 @@ roundy_prompt_left() {
   if [ -n "${Roundy[data_texc]}" ]; then
     p+="%K{${ROUNDY_COLORS_BG_TEXC}}"
   else
-    p+="%K{${ROUNDY_COLORS_BG_USER}}"
+    p+="%K{${ROUNDY_COLORS_BG_DIR}}"
   fi
   p+="%F{${ROUNDY_COLORS_BG_EXITSTATUS}}"
   p+="${char_close}"
@@ -142,8 +142,32 @@ roundy_prompt_left() {
     p+="%K{${ROUNDY_COLORS_BG_TEXC}}"
     p+="%F{${ROUNDY_COLORS_FG_TEXC}}"
     p+="${Roundy[data_texc]}"
-    p+="%K{${ROUNDY_COLORS_BG_USER}}"
+    p+="%K{${ROUNDY_COLORS_BG_DIR}}"
     p+="%F{${ROUNDY_COLORS_BG_TEXC}}"
+    p+="${char_close}"
+  fi
+
+  p+="%F{${ROUNDY_COLORS_BG_DIR}}"
+  p+="%K{${ROUNDY_COLORS_BG_DIR}}"
+  p+="%F{${ROUNDY_COLORS_FG_DIR}}"
+  p+="${Roundy[data_dir]}"
+  if [ -n "${Roundy[data_gitinfo]}" ]; then
+    p+="%K{${ROUNDY_COLORS_BG_GITINFO}}"
+  else
+    p+="%K{${ROUNDY_COLORS_BG_USER}}"
+  fi
+  p+="%F{${ROUNDY_COLORS_BG_DIR}}"
+  p+="${char_close}"
+
+  if [[ -n "${Roundy[data_gitinfo]}" ]]; then
+    p+="%K{${ROUNDY_COLORS_BG_DIR}}"
+    p+="%F{${ROUNDY_COLORS_BG_GITINFO}}"
+    p+="%K{${ROUNDY_COLORS_BG_GITINFO}}"
+    p+="%F{${ROUNDY_COLORS_FG_GITINFO}}"
+    p+="${Roundy[data_gitinfo]}"
+    cl_close=${ROUNDY_COLORS_BG_GITINFO}
+    p+="%k"
+    p+="%F{${cl_close}}"
     p+="${char_close}"
   fi
 
@@ -159,40 +183,10 @@ roundy_prompt_left() {
   typeset -g PROMPT=${Roundy[lprompt]}
 }
 
-roundy_prompt_right() {
-  local p cl_close
-  local char_open=$'\ue0b6'
-  local char_close=$'\ue0b4'
-
-  p+="%F{${ROUNDY_COLORS_BG_DIR}}"
-  p+="${char_open}"
-  p+="%K{${ROUNDY_COLORS_BG_DIR}}"
-  p+="%F{${ROUNDY_COLORS_FG_DIR}}"
-  p+="${Roundy[data_dir]}"
-  cl_close=${ROUNDY_COLORS_BG_DIR}
-  if [[ -n "${Roundy[data_gitinfo]}" ]]; then
-    p+="%K{${ROUNDY_COLORS_BG_DIR}}"
-    p+="%F{${ROUNDY_COLORS_BG_GITINFO}}"
-    p+="${char_open}"
-    p+="%K{${ROUNDY_COLORS_BG_GITINFO}}"
-    p+="%F{${ROUNDY_COLORS_FG_GITINFO}}"
-    p+="${Roundy[data_gitinfo]}"
-    cl_close=${ROUNDY_COLORS_BG_GITINFO}
-  fi
-  p+="%k"
-  p+="%F{${cl_close}}"
-  p+="${char_close}"
-  p+="%f"
-
-  Roundy[rprompt]=$p
-  typeset -g RPROMPT=${Roundy[rprompt]}
-}
-
 roundy_draw_prompts() {
   Roundy[data_dir]=$(roundy_get_dir)
 
   roundy_prompt_left
-  roundy_prompt_right
 }
 
 roundy_draw_gap() {
@@ -258,7 +252,6 @@ roundy_precmd() {
 roundy_main() {
   # Save stuff that will be overrided by the theme
   Roundy[saved_lprompt]=$PROMPT
-  Roundy[saved_rprompt]=$RPROMPT
   Roundy[saved_promptsubst]=${options[promptsubst]}
   Roundy[saved_promptbang]=${options[promptbang]}
 
@@ -286,7 +279,6 @@ roundy_plugin_unload() {
   [[ ${Roundy[saved_promptbang]} == 'on' ]] && setopt prompt_bang
 
   PROMPT=${Roundy[saved_lprompt]}
-  RPROMPT=${Roundy[saved_rprompt]}
 
   add-zsh-hook -D preexec roundy_preexec
   add-zsh-hook -D precmd roundy_precmd
@@ -297,7 +289,6 @@ roundy_plugin_unload() {
     roundy_draw_gap \
     roundy_draw_prompts \
     roundy_prompt_left \
-    roundy_prompt_right \
     roundy_get_dir \
     roundy_get_gitinfo \
     roundy_get_txec \
