@@ -180,7 +180,6 @@ roundy_prompt_left() {
   p+="%(#.${ROUNDY_USER_CONTENT_ROOT}.${ROUNDY_USER_CONTENT_NORMAL})"
   p+="%k"
   p+="%F{${ROUNDY_COLORS_BG_USER}}"
-  p+="${char_close}"
   p+="%f "
 
   Roundy[lprompt]=$p
