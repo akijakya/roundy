@@ -20,7 +20,7 @@ Roundy[root]=${0:A:h}
 
 # Options and Color definition for Time Execution Command
 : ${ROUNDY_COLORS_FG_TEXC:=0}
-: ${ROUNDY_COLORS_BG_TEXC:=2}
+: ${ROUNDY_COLORS_BG_TEXC:=3}
 # Minimal time (in ms) for the Time Execution of Command is displayed in prompt
 : ${ROUNDY_TEXC_MIN_MS:=5}
 
@@ -32,8 +32,8 @@ Roundy[root]=${0:A:h}
 : ${ROUNDY_USER_CONTENT_ROOT:=" %n "}
 
 # Color definition for Active directory name
-: ${ROUNDY_COLORS_FG_DIR:=4}
-: ${ROUNDY_COLORS_BG_DIR:=0}
+: ${ROUNDY_COLORS_FG_DIR:=0}
+: ${ROUNDY_COLORS_BG_DIR:=2}
 # Working Directory Info Mode
 # Valid choice are : "full", "short", or "dir-only"
 : ${ROUNDY_DIR_MODE:="dir-only"}
